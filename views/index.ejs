@@ -3,40 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Reading Suggestion</title>
+    <title>Reading Recommendations</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Random Reading Suggestions</h1>
-    <p class="subtitle">This random book selector will suggest your perfect read from the New York Times' Best Seller book lists.</p>
+    <h1>Book Matching 📖💕</h1>
+    <p class="subtitle">Dive into your next great book! This tool will generate a random book suggestion from the latest New York Times Bestselling lists.</p>
     
     
     <div class="randomBookContainer">
         <div class="bookSelector">
-        <h2>Select the type of book</h2>
-        <div class=" buttons">
-            <% for (i=0; i<currentLists.length ; i++) { %>
-                <button class="button" id="button<%=[i]%>"><a href="/randomBookTitle"><%= currentLists[i] %></a></button>
-                <%# $(`#button${i}`).on("click", function (){ %>
-                <%# alert (`#button${i} was clicked`) %>   
-                <%# }) %>   
-            <% } %> 
+            <div class= "button">
+               <a href="/randomBookTitle"><p>Find a book!</p></a>
+            </div>  
         </div>
-                
-        </div>
+         <% if (locals.title) { %>
         <div class="bookDetails">
-            <% if (locals.title) { %>
-            <h3 class="bookTitle"><%= title %></h3>
-            <h4 class="bookAuth"><%= author %></h4>
-            <p class="bookDescription"><%= description %></p>
+           
+                <p class="bookTitle"><%= title %></p>
+                <p class="bookAuthor">By <%= author %></p>
+                <p class="bookDescription"><%= description %></p>
         </div>
         <div class="bookPicture">
             <img src=<%= image %>>
+        </div>     
+        <div class="buyingLink">
+            <p>Where to buy it: </br> <a href="<%= buy %>"><%= buy %></a></p>
         </div>
-     
+        <div class="bestsellingList">
+            <p>BestSelling list: </br><%= listName %></p>
+             
+        </div>
         <% } else { %>
-            <h3>An awesome title is coming up!</h3>
+            <div class="empty">
+                <p>Click on the button to find your next great reading!</p>
+            </div>
+            
         <% } %>
+       
     </div>
 </body>
 </html>
