@@ -13,16 +13,17 @@ let listNamesEncoded = [];
 let currentLists = [];
 
 app.get ("/", async (req, res) => {
-     
+     currentLists= [];
+     listNamesEncoded = [];
     try {
         const result = await axios.get(
           "https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=YrMRJHA6VyOI21DPcRUlkW0wPeOD5V3C"
         );
         const response = result.data;
-        const lists = response.results.lists
+        const { lists } = response.results;
 
         //Push each list_name_encoded from the list array to the current Lists
-        lists.forEach(element => {
+        lists.forEach(element => { 
             currentLists.push(element.display_name);
             listNamesEncoded.push(element.list_name_encoded);
         });
@@ -37,8 +38,7 @@ app.get ("/", async (req, res) => {
 
 //get method for random book title generator
 app.get ("/randomBookTitle", async (req, res) => {
-   
-   
+      
    // const clickedButton = req.id
     try {
         const result = await axios.get(
@@ -63,7 +63,7 @@ app.get ("/randomBookTitle", async (req, res) => {
 
 
 
-
+export {currentLists , listNamesEncoded}
 
 app.listen(port, () => {
     console.log (`Listening on Port ${port}`)
