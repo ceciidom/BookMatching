@@ -16,9 +16,21 @@
     
     <div class="randomBookContainer">
         <div class="bookSelector">
-            <div class= "button">
-               <a href="/randomBookTitle"><p>Find a book!</p></a>
-            </div>  
+        <h2>Select the type of book</h2>
+        <div class=" buttons">
+
+            <form action="/randomBookTitle" method="post">
+                <label for="lists">Select a BestSelling List</label>
+                <select id="lists" name="lists">
+
+                    <% for (i=0; i<currentLists.length ; i++) { %>
+                        <option value="<%=encodedNames[i] %>"><%= currentLists[i] %></option>
+                    <% } %> 
+                </select>  
+                <button type="submit">Find a book!</button>
+            </form>
+            
+        </div>                
         </div>
          <% if (locals.title) { %>
         <div class="bookDetails">
@@ -43,7 +55,6 @@
             </div>
             
         <% } %>
-       
     </div>
 </body>
 </html>
