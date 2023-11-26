@@ -1,25 +1,21 @@
 import express from "express";
 import axios from "axios";
-import ejs from "ejs";
-import $ from "jquery-jsdom";
 import bodyParser from "body-parser";
+import {API_KEY} from "./modules/API Key.js"
 
 const port = 3000;
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const API_KEYS = "YrMRJHA6VyOI21DPcRUlkW0wPeOD5V3C";
 
-let currentLists = [];
-let listNamesEncoded = [];
+const currentLists = [];
+const listNamesEncoded = [];
 
 app.get ("/", async (req, res) => {
-     currentLists= [];
-     listNamesEncoded = [];
     try {
         const result = await axios.get(
-          "https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=YrMRJHA6VyOI21DPcRUlkW0wPeOD5V3C"
+            `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${API_KEY}`
         );
         const response = result.data;
         const { lists } = response.results;
@@ -38,33 +34,39 @@ app.get ("/", async (req, res) => {
     }
 })
 
-//get method for random book title generator
+let lists;
+
 app.post ("/randomBookTitle", async (req, res) => {
-      
-   // const clickedButton = req.id
+      lists = req.body.lists;
     try {
         const result = await axios.get(
-          `https://api.nytimes.com/svc/books/v3/lists/full-overview.json?api-key=${API_KEYS}`
+          `https://api.nytimes.com/svc/books/v3/lists/${lists}.json?api-key=${API_KEY}`
         );
         
         const data = result.data;
 
-        const allLists = data.results.lists
-        const randomListNumber = Math.floor(Math.random() * allLists.length);
-        const selectedList = allLists[randomListNumber];
+        const listName = data.results.list_name;
 
-
-        const allBooks = selectedList.books;
+        const allBooks = data.results.books
         const randomBookNumber = Math.floor(Math.random() * allBooks.length);
-        const selectedBook = allBooks[randomBookNumber];
+        const selectedBook= allBooks[randomBookNumber];
+
         
-        let { display_name } = selectedList;
         let {title , author , description , book_image, buy_links} = selectedBook;
         let buyLink = buy_links[0].url;
            
 
 
-        res.render("index.ejs", {listName: display_name , title: title, author: author, description: description, image: book_image, buy : buyLink, currentLists : currentLists})
+        res.render("Book Suggestion.ejs", {
+          listName: listName,
+          title: title,
+          author: author,
+          description: description,
+          image: book_image,
+          buy: buyLink,
+          currentLists: currentLists,
+          encodedNames: listNamesEncoded,
+        });
     } catch (error) {
       console.log(error);
       res.status(500);

@@ -3,58 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reading Recommendations</title>
+    <title>Find a Book</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Book Matching 📖💕</h1>
-    <p class="subtitle">Dive into your next great book! This tool will generate a random book suggestion from the latest New York Times Bestselling lists.</p>
-    
-    
-    <div class="randomBookContainer">
-        <div class="bookSelector">
-        <h2>Select the type of book</h2>
-        <div class=" buttons">
-
-            <form action="/randomBookTitle" method="post">
-                <label for="lists">Select a BestSelling List</label>
-                <select id="lists" name="lists">
-
+    <div class="box">
+        <div class="findABook">
+            <div>
+                <h1>Book Matching📖💕</h1>
+                <p class="subtitle">Dive into your next great book! This tool will generate a random book suggestion from the latest New York Times Bestselling lists.</p>
+            </div>
+            <div>
+                <form class="form" action="/randomBookTitle" method="post">
+                <label for="lists">Select the list</label>
+                <select class="options" id="lists" name="lists">
                     <% for (i=0; i<currentLists.length ; i++) { %>
                         <option value="<%=encodedNames[i] %>"><%= currentLists[i] %></option>
-                    <% } %> 
+                        <% } %> 
                 </select>  
-                <button type="submit">Find a book!</button>
-            </form>
-            
-        </div>                
+                </br>
+                <button class="button submit" type="submit">Find a book!</button>
+            </form>    
+            </div>  
+                          
         </div>
-         <% if (locals.title) { %>
-        <div class="bookDetails">
-           
-                <p class="bookTitle"><%= title %></p>
-                <p class="bookAuthor">By <%= author %></p>
-                <p class="bookDescription"><%= description %></p>
-        </div>
-        <div class="bookPicture">
-            <img src=<%= image %>>
-        </div>     
-        <div class="buyingLink">
-            <p>Where to buy it: </br> <a href="<%= buy %>"><%= buy %></a></p>
-        </div>
-        <div class="bestsellingList">
-            <p>BestSelling list: </br><%= listName %></p>
-             
-        </div>
-        <% } else { %>
-            <div class="empty">
-                <p>Click on the button to find your next great reading!</p>
-            </div>
-            
-        <% } %>
     </div>
+
+
+
 </body>
 </html>
