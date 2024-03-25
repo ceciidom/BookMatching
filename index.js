@@ -1,7 +1,7 @@
 import express from "express";
 import axios from "axios";
 import bodyParser from "body-parser";
-import {API_KEY} from "./modules/API Key.js"
+import {API_KEY}from "./modules/apiKey.js"
 
 const port = 3000;
 const app = express();
@@ -15,7 +15,11 @@ const listNamesEncoded = [];
 app.get ("/", async (req, res) => {
     try {
         const result = await axios.get(
-            `https://api.nytimes.com/svc/books/v3/lists/overview.json?api-key=${API_KEY}`
+            `https://api.nytimes.com/svc/books/v3/lists/overview.json`, {
+              params: {
+                "api-key": API_KEY
+              }
+            }
         );
         const response = result.data;
         const { lists } = response.results;
@@ -26,7 +30,10 @@ app.get ("/", async (req, res) => {
             listNamesEncoded.push(element.list_name_encoded);
         });
        // console.log(listNamesEncoded);
-        res.render ("index.ejs" , {currentLists : currentLists, encodedNames: listNamesEncoded});
+        res.render ("index.ejs" , {
+          //NavBar working
+          currentLists : currentLists, 
+          encodedNames: listNamesEncoded});
 
     } catch (error) {
         console.log(error)
@@ -40,12 +47,17 @@ app.post ("/randomBookTitle", async (req, res) => {
       lists = req.body.lists;
     try {
         const result = await axios.get(
-          `https://api.nytimes.com/svc/books/v3/lists/${lists}.json?api-key=${API_KEY}`
+          `https://api.nytimes.com/svc/books/v3/lists/${lists}.json`, {
+            params: {
+              "api-key": API_KEY
+            }
+          }
         );
         
         const data = result.data;
 
-        const listName = data.results.list_name;
+        const {list_name , list_name_encoded} = data.results;
+       
 
         const allBooks = data.results.books
         const randomBookNumber = Math.floor(Math.random() * allBooks.length);
@@ -53,27 +65,120 @@ app.post ("/randomBookTitle", async (req, res) => {
 
         
         let {title , author , description , book_image, buy_links} = selectedBook;
-        let buyLink = buy_links[0].url;
+        buy_links = buy_links[0].url;
            
 
 
         res.render("Book Suggestion.ejs", {
-          listName: listName,
           title: title,
           author: author,
           description: description,
           image: book_image,
-          buy: buyLink,
+          buy: buy_links,
+          //NavBar working
           currentLists: currentLists,
           encodedNames: listNamesEncoded,
+          encodedName: list_name_encoded,
+          listName: list_name,
         });
     } catch (error) {
       console.log(error);
       res.status(500);
     }
 })
+app.post("/allLists" , async (req, res) =>{
+
+    try {
+      const result = await axios.get(
+        `https://api.nytimes.com/svc/books/v3/lists/full-overview.json` , {
+          params: {
+            "api-key": API_KEY
+          }
+        }
+      );
+
+      const data = result.data;
+      const {lists} = data.results
+
+      const randomListNumber = Math.floor(Math.random() * lists.length);
+      const selectedList = lists[randomListNumber];
+      const { list_name, list_name_encoded } = selectedList;
+      
+      
+      const randomBookNumber = Math.floor(Math.random() * selectedList.books.length);
+      const randomBook = selectedList.books[randomBookNumber];
+
+      let {title , author , description , book_image, buy_links} = randomBook;
+      buy_links = buy_links[0].url;
+
+      res.render("Book Suggestion.ejs", {
+        title: title,
+        author: author,
+        description: description,
+        image: book_image,
+        buy: buy_links,
+
+        //NavBar working
+        currentLists: currentLists,
+        encodedNames: listNamesEncoded,
+        encodedName: list_name_encoded,
+        listName: list_name,
+      });
+    
+
+    } catch (error) {
+      console.log(error);
+      res.status(500);
+    }
+});
 
 
+
+app.post("/completeList", async (req, res) => {
+  let bookTitles = [];
+  let bookImages = [];
+
+    const lists = req.body.encoded;
+    try {
+        const result = await axios.get(
+          `https://api.nytimes.com/svc/books/v3/lists/${lists}.json`,
+          {
+            params: {
+              "api-key": API_KEY,
+            },
+          }
+        );
+
+            const data = result.data;
+
+            const { list_name, list_name_encoded, books } = data.results;
+
+            
+            books.forEach((element) => {
+              bookTitles.push(element.title);
+              bookImages.push(element.book_image);
+            
+            });
+
+        res.render("bookLists.ejs", {
+          //NavBar working
+          currentLists: currentLists,
+          encodedNames: listNamesEncoded,
+          encodedName: list_name_encoded,
+          listName: list_name,
+
+          //Current list displaying
+          thisList: list_name,
+          bookNames: bookTitles,
+          image: bookImages,
+        
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500);
+    }
+
+})
 
 app.listen(port, () => {
     console.log (`Listening on Port ${port}`)

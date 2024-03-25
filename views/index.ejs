@@ -14,7 +14,7 @@
         <div class="findABook">
             <div>
                 <h1>Book Matching📖💕</h1>
-                <p class="subtitle">Dive into your next great book! This tool will generate a random book suggestion from the latest New York Times Bestselling lists.</p>
+                <p class="subtitle">Dive into your next great story! This tool will generate a random book suggestion from the latest New York Times Bestselling lists.</p>
             </div>
             <div>
                 <form class="form" action="/randomBookTitle" method="post">
@@ -24,8 +24,9 @@
                         <option value="<%=encodedNames[i] %>"><%= currentLists[i] %></option>
                         <% } %> 
                 </select>  
-                </br>
-                <button class="button submit" type="submit">Find a book!</button>
+                <button class="button submit" type="submit">Scrabble</button>
+                <p>or</p>
+                <button class="button submit secondary" type="submit" formaction="/allLists">Scrabble ALL lists</button>
             </form>    
             </div>  
                           

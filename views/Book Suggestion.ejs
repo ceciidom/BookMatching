@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Book</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-    <div class="topNav">
-        <a href="/" style="color: inherit; cursor: pointer;">Book Matching📖💕</a>
-        <div>
-            <button onClick="window.location.reload();" class="options">Find Another Book</button>
-            <a>Bestselling List: <%= listName %></a>    
-        </div>
-          
-        <form class="navForm" action="/randomBookTitle" method="post">
-            <select class="options" id="lists" name="lists">
-                    <option>See More Lists</option>
-                <% for (i=0; i<currentLists.length ; i++) { %>
-                    <option value="<%=encodedNames[i] %>"><%= currentLists[i] %></option>
-                    <% } %> 
-            </select>  
-            <button class="options" type="submit">Search</button>
-        </form>        
-    </div>
+<%- include("partials/header.ejs") %>
+
     <div class="body">
         <div class="randomBookContainer">
         <% if (locals.title) { %>
             <div class="bookDetails">
             
-                    <p class="bookTitle"><%= title %></p>
+                    <p class="bookTitle"><%= title %> </p>
                     <p class="bookAuthor">By <%= author %></p>
                     <p class="bookDescription"><%= description %></p>
             </div>

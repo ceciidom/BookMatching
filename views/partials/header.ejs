@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Book</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind:wght@300;400;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<header>
+      <div class="topNav">
+        <a href="/" style="color: inherit; cursor: pointer;">Book Matching📖💕</a>
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <button onClick="window.location.reload();" class="options">Scrabble Again</button>
+            <div style="display: flex">
+                <a >Bestselling List: </a>
+                <form action="/completeList" method="post">
+                <button name="encoded" value="<%= encodedName %>" type="submit" class="button" style="text-decoration: #FEFAE0 wavy underline; font-weight: bold;"><%= listName %> </button>
+                </form>
+            </div> 
+        </div>
+        
+          
+        <form class="navForm" action="/randomBookTitle" method="post">
+            <select class="options" id="lists" name="lists">
+                    <option>See More Lists</option>
+                <% for (i=0; i<currentLists.length ; i++) { %>
+                    <option value="<%=encodedNames[i] %>"><%= currentLists[i] %></option>
+                    <% } %> 
+            </select>  
+            <button class="options" type="submit">Search</button>
+            <button class="options" type="submit" formaction="/allLists">ALL lists</button>
+        </form>        
+    </div>  
+</header>
+<body>

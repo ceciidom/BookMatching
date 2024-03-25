@@ -1,0 +1,21 @@
+<%- include("partials/header.ejs") %> 
+
+ <div class="body">
+   <div class="container">
+     <div class="currentListName">
+       Collection: <%= thisList %> 
+    </div>
+
+    <div class="bookCollection">
+      <% for (i=0; i<bookNames.length ; i++) { %>
+       <div class="item">
+         <img class="picture" src=<%= image[i] %>>
+         <div class="title"><%= bookNames[i] %></div>
+      </div>  
+      <% } %>     
+   </div>
+
+      
+
+    </div>
+    
